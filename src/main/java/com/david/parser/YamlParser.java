@@ -72,7 +72,7 @@ public class YamlParser extends  AbstractParser {
 
                         //Tree structure
                     } else {
-                        String name = datas[0];
+                        String name = datas[0].trim();
                         Node node = new Node(name);
 
                         //add to parent node
@@ -87,8 +87,6 @@ public class YamlParser extends  AbstractParser {
                         node.setParentNode(nodeElement);
                     }
                 }
-
-                System.out.println(line);
                 nbLine++;
                 // process the line.
             }

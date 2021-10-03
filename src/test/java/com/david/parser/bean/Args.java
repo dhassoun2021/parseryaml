@@ -1,8 +1,6 @@
 package com.david.parser.bean;
 
 public class Args {
-
-
     private String browser;
     private String geo;
     private String shelf;
