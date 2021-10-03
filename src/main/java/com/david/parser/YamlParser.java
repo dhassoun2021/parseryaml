@@ -10,21 +10,14 @@ import java.util.Map;
 /**
  * This class has responsability to parse YAML file and store data in instance
  */
-public class YamlParser implements Parser{
+public class YamlParser extends  AbstractParser {
 
     private Map <Integer,NodeElement> deepLevelNodes = new HashMap<>();
     private Map <Integer,Integer> widthSpaceDeepLevels = new HashMap<>();
 
     private static final String COLON = ":";
 
-    @Override
-    /**
-     * Read a yaml file and store data in the instance corresponding to the class theClass
-     */
-    public <T> T read(File file, Class<T> theClass) throws IOException {
-        NodeRoot nodeRoot = read(file);
-        return null;
-    }
+
 
     /**
      * Compute length of white space begining a line
@@ -49,7 +42,7 @@ public class YamlParser implements Parser{
      * @return
      * @throws IOException
      */
-    private NodeRoot read (File file) throws IOException {
+    public NodeRoot readFile (File file) throws IOException {
         NodeRoot nodeRoot = null;
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
