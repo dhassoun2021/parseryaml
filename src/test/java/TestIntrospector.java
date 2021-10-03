@@ -2,6 +2,7 @@ import com.david.introspector.Introspector;
 import com.david.parser.Node;
 import com.david.parser.NodeRoot;
 import com.david.parser.bean.Info;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class TestIntrospector {
@@ -25,5 +26,10 @@ public class TestIntrospector {
         nodeGeo.setValue("any");
         Introspector introspector = new Introspector(nodeRoot);
         Info info = introspector.toInstance(Info.class);
+        Assert.assertNotNull(info);
+        Assert.assertEquals("value",info.getName());
+        Assert.assertNotNull(info.getDependencies());
+        Assert.assertNotNull(info.getDependencies().getArgs());
+        Assert.assertEquals("any",info.getDependencies().getArgs().getGeo());
     }
 }
