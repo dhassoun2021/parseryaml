@@ -1,8 +1,7 @@
-import com.david.parser.NodeRoot;
-import com.david.parser.Parser;
-import com.david.parser.YamlParser;
-import com.david.parser.bean.Info;
+package com.david.parser;
+
 import org.junit.Test;
+
 import java.io.File;
 
 

@@ -1,6 +1,6 @@
+package com.david.parser;
+
 import com.david.introspector.Introspector;
-import com.david.parser.Node;
-import com.david.parser.NodeRoot;
 import com.david.parser.bean.Info;
 import org.junit.Assert;
 import org.junit.Test;
