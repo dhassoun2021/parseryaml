@@ -17,7 +17,6 @@ import java.util.Map;
 public class YamlParser extends  AbstractParser {
 
     private Map <Integer,NodeElement> widthSpaceNodes = new HashMap<>();
-   // private Map <Integer,Integer> widthSpaceDeepLevels = new HashMap<>();
 
     private static final String COLON = ":";
     private static final String DASH = "-";
@@ -48,20 +47,21 @@ public class YamlParser extends  AbstractParser {
      * @throws IOException
      */
     public NodeRoot readFile (File file) throws IOException,ParsingException {
-        NodeRoot nodeRoot = null;
+        NodeRoot nodeRoot = new NodeRoot();
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             int nbLine = 1;
             int widthSpace;
-            int lastId = 0;
             int nbLineKeyValue = 0;
-            nodeRoot = new NodeRoot();
+
             NodeElement lastNode = null;
             boolean lineWithListPattern = false;
             List <String> elements = null;
             while ((line = br.readLine()) != null) {
                 widthSpace = computePrefixeWidthSpace(line);
                 line = line.trim();
+
+                //store node root at first line read
                 if (nbLine == 1) {
                     widthSpaceNodes.put(widthSpace,nodeRoot);
                 }
@@ -119,9 +119,7 @@ public class YamlParser extends  AbstractParser {
                        lineWithListPattern = true;
                     }
                 }
-
                 nbLine++;
-                // process the line.
             }
         }
         return  nodeRoot;
