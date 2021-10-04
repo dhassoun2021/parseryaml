@@ -14,15 +14,13 @@ public class TestIntrospector {
         nodeName.setValue("value");
         nodeRoot.addNode(nodeName);
         Node nodeDependency = new Node("dependencies");
-        Node nodeArgs = new Node("args");
         Node nodeGeo = new Node("geo");
-        nodeDependency.addNode(nodeArgs);
-        nodeArgs.addNode(nodeGeo);
+        nodeDependency.addNode(nodeGeo);
         nodeRoot.addNode(nodeDependency);
         nodeName.setParentNode(nodeRoot);
         nodeDependency.setParentNode(nodeRoot);
-        nodeArgs.setParentNode(nodeDependency);
-        nodeGeo.setParentNode(nodeArgs);
+        nodeDependency.setParentNode(nodeDependency);
+        nodeGeo.setParentNode(nodeDependency);
         nodeGeo.setValue("any");
         Introspector introspector = new Introspector(nodeRoot);
         Info info = introspector.toInstance(Info.class);
@@ -30,6 +28,6 @@ public class TestIntrospector {
         Assert.assertEquals("value",info.getName());
         Assert.assertNotNull(info.getDependencies());
         Assert.assertNotNull(info.getDependencies().getArgs());
-        Assert.assertEquals("any",info.getDependencies().getArgs().getGeo());
+        Assert.assertEquals("any",info.getDependencies().getGeo());
     }
 }

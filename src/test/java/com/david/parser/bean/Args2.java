@@ -1,6 +1,6 @@
 package com.david.parser.bean;
 
-public class Args {
+public class Args2 {
     private String browser;
     private String geo;
     private String shelf;
@@ -10,7 +10,7 @@ public class Args {
     private String google_maps;
     private String dart_to_js_script_rewriter;
 
-    public Args () {}
+    public Args2() {}
 
     public String getBrowser() {
         return browser;

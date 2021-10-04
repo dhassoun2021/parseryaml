@@ -11,13 +11,14 @@ public class TestYamlParser {
     @Test
     public void test() throws Exception {
         YamlParser parser = new YamlParser();
-        NodeRoot nodeRoot = parser.readFile(new File("src/test/resources/file_simple.yaml"));
+        NodeRoot nodeRoot = parser.readFile(new File("src/test/resources/file2.yaml"));
     }
 
     @Test
     public void parseYamlFile() throws Exception {
         Parser parser = new YamlParser();
-        Info info = parser.read(new File("src/test/resources/file_simple.yaml"), Info.class);
+        Info info = parser.read(new File("src/test/resources/file2.yaml"), Info.class);
     }
+
 
 }
