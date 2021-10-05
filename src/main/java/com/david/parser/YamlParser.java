@@ -20,6 +20,8 @@ public class YamlParser extends  AbstractParser {
 
     private static final String COLON = ":";
     private static final String DASH = "-";
+    private static final String BLANK = " ";
+    private static final String KEY_VALUE_PATTERN = "\\w+:\\s\\S.*";
 
 
 
@@ -62,67 +64,112 @@ public class YamlParser extends  AbstractParser {
                 line = line.trim();
 
                 //store node root at first line read
-                if (nbLine == 1) {
+                if (isFirstLineRead(nbLine)) {
                     widthSpaceNodes.put(widthSpace,nodeRoot);
                 }
-                String[] datas = line.split(COLON);
-                if (datas != null) {
 
-                    // key/value data
-                    if (datas.length == 2) {
-                        nbLineKeyValue++;
-                        if (nbLineKeyValue == 1 && widthSpaceNodes.get(widthSpace) != null && !(widthSpaceNodes.get(widthSpace) instanceof NodeRoot)) {
-                            widthSpaceNodes.remove(widthSpace);
-                        }
-                        String name = datas[0].trim();
-                        String value = datas[1].trim();
-                        Node node = new Node(name);
-                        node.setValue(value);
-                        NodeElement nodeElement = widthSpaceNodes.get(widthSpace);
-                        if (nodeElement == null) {
-                            widthSpaceNodes.put(widthSpace, lastNode);
-                            nodeElement = lastNode;
-                        }
-                        nodeElement.addNode(node);
-                        node.setParentNode(nodeElement);
+                // key/value data
+                if (hasLinePatternKeyValue(line)) {
+                    nbLineKeyValue++;
+                    if (nbLineKeyValue == 1 && widthSpaceNodes.get(widthSpace) != null && !(widthSpaceNodes.get(widthSpace) instanceof NodeRoot)) {
+                        widthSpaceNodes.remove(widthSpace);
+                    }
+                    Node node = getNodeFromLineKeyValuePattern(line);
+                    NodeElement parentNode = widthSpaceNodes.get(widthSpace);
+                    if (parentNode == null) {
+                        widthSpaceNodes.put(widthSpace, lastNode);
+                        parentNode = lastNode;
+                    }
+                    parentNode.addNode(node);
+                    node.setParentNode(parentNode);
 
                         //Tree structure
-                    } else if (line.endsWith(COLON)) {
+                    } else if (hasLinePatternNode(line)) {
                         nbLineKeyValue = 0;
-                        String name = datas[0].trim();
-                        Node node = new Node(name);
+                        Node node = getNodeFromLineNodePattern(line);
                         lastNode = node;
                         //add to parent node
-                        NodeElement nodeElement = widthSpaceNodes.get(widthSpace);
-                        if (nodeElement == null) {
+                        NodeElement parentNode = widthSpaceNodes.get(widthSpace);
+                        if (parentNode == null) {
                             widthSpaceNodes.put(widthSpace, lastNode);
-                            nodeElement = lastNode;
+                            parentNode = lastNode;
                         }
-                        nodeElement.addNode(node);
-                        node.setParentNode(nodeElement);
+                        parentNode.addNode(node);
+                        node.setParentNode(parentNode);
 
-                        //list
-                    } else if (line.startsWith(DASH)) {
+                      //list pattern
+                    } else if (hasLinePatternList(line)) {
                         nbLineKeyValue = 0;
-                        int index = line.indexOf(" ");
-                       String elementOfList = line.substring(index+1,line.length());
+                       String elementOfList = getElementList(line);
                        if (!lineWithListPattern) {
                            elements = new ArrayList<>();
                            if (lastNode instanceof  Node) {
                                Node nodeList = (Node) lastNode;
                                nodeList.setValue(elements);
                            } else {
-                               throw new ParsingException("");
+                               throw new ParsingException("Error parsing at line " + nbLine);
                            }
                        }
                        elements.add(elementOfList);
                        lineWithListPattern = true;
                     }
-                }
+
                 nbLine++;
             }
         }
         return  nodeRoot;
+    }
+
+    private boolean isFirstLineRead (int nbLine) {
+        return (nbLine == 1);
+    }
+
+    private boolean hasLinePatternList (String line) {
+        if (line == null) {
+            return false;
+        }
+        return line.startsWith(DASH);
+    }
+
+    private boolean hasLinePatternKeyValue (String line) {
+        if (line == null) {
+            return false;
+        }
+        return line.matches(KEY_VALUE_PATTERN);
+    }
+
+    private boolean hasLinePatternNode (String line) {
+        if (line == null) {
+            return false;
+        }
+        return line.endsWith(COLON);
+    }
+
+    private Node getNodeFromLineKeyValuePattern (String line) {
+        int index = line.indexOf(COLON);
+        String key = line.substring(0,index);
+        String value = line.substring(index+2);
+        Node node = new Node(key);
+        node.setValue(value);
+        return node;
+    }
+
+    private Node getNodeFromLineNodePattern (String line) {
+        String name = line.substring(0,line.length()-1);
+        Node node = new Node(name);
+        return node;
+    }
+
+    private String getElementList (String line) {
+        if (line == null) {
+            return null;
+        }
+        int index = line.indexOf(BLANK);
+        if (index == -1) {
+            return null;
+        }
+        return line.substring(index+1);
+
     }
 
 

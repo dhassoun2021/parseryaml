@@ -3,13 +3,10 @@ package com.david.parser;
 import com.david.parser.bean.Dependency;
 import com.david.parser.bean.DevDependency;
 import com.david.parser.bean.Info;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.List;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
 
 
@@ -51,6 +48,4 @@ public class TestYamlParser {
         info.setTransformers(Arrays.asList("dart_to_js_script_rewriter","js_anonymizer","js_compresser"));
         return info;
     }
-
-
 }
