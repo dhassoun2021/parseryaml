@@ -57,7 +57,7 @@ public class YamlParser extends  AbstractParser {
             int nbLineKeyValue = 0;
 
             NodeElement lastNode = null;
-            boolean lineWithListPattern = false;
+            boolean lineWithListPatternProcessed = false;
             List <String> elements = null;
             while ((line = br.readLine()) != null) {
                 widthSpace = computePrefixeWidthSpace(line);
@@ -75,35 +75,22 @@ public class YamlParser extends  AbstractParser {
                         widthSpaceNodes.remove(widthSpace);
                     }
                     Node node = getNodeFromLineKeyValuePattern(line);
-                    NodeElement parentNode = widthSpaceNodes.get(widthSpace);
-                    if (parentNode == null) {
-                        widthSpaceNodes.put(widthSpace, lastNode);
-                        parentNode = lastNode;
-                    }
-                    parentNode.addNode(node);
-                    node.setParentNode(parentNode);
+                    processNode(node,widthSpace,lastNode);
 
                         //Tree structure
                     } else if (hasLinePatternNode(line)) {
                         nbLineKeyValue = 0;
                         Node node = getNodeFromLineNodePattern(line);
                         lastNode = node;
-                        //add to parent node
-                        NodeElement parentNode = widthSpaceNodes.get(widthSpace);
-                        if (parentNode == null) {
-                            widthSpaceNodes.put(widthSpace, lastNode);
-                            parentNode = lastNode;
-                        }
-                        parentNode.addNode(node);
-                        node.setParentNode(parentNode);
+                        processNode(node,widthSpace,lastNode);
 
                       //list pattern
                     } else if (hasLinePatternList(line)) {
                         nbLineKeyValue = 0;
                        String elementOfList = getElementList(line);
-                       if (!lineWithListPattern) {
+                       if (!lineWithListPatternProcessed) {
                            elements = new ArrayList<>();
-                           if (lastNode instanceof  Node) {
+                           if (lastNode instanceof Node) {
                                Node nodeList = (Node) lastNode;
                                nodeList.setValue(elements);
                            } else {
@@ -111,13 +98,19 @@ public class YamlParser extends  AbstractParser {
                            }
                        }
                        elements.add(elementOfList);
-                       lineWithListPattern = true;
+                       lineWithListPatternProcessed = true;
                     }
 
                 nbLine++;
             }
         }
         return  nodeRoot;
+    }
+
+    private void processNode (Node node, int widthSpace, NodeElement lastNode) {
+        NodeElement parentNode = getParentNode(widthSpace,lastNode);
+        parentNode.addNode(node);
+        node.setParentNode(parentNode);
     }
 
     private boolean isFirstLineRead (int nbLine) {
@@ -170,6 +163,15 @@ public class YamlParser extends  AbstractParser {
         }
         return line.substring(index+1);
 
+    }
+
+    private NodeElement getParentNode (int widthSpace, NodeElement lastNode) {
+        NodeElement parentNode = widthSpaceNodes.get(widthSpace);
+        if (parentNode == null) {
+            widthSpaceNodes.put(widthSpace, lastNode);
+            parentNode = lastNode;
+        }
+        return parentNode;
     }
 
 
