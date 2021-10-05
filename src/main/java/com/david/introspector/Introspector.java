@@ -9,6 +9,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * This class has responsability to create an instance dynamically and populate it from data store in EntityRoot structure.
+ */
 public class Introspector {
 
     private final static String GET_PREFIX = "get";
@@ -19,6 +22,13 @@ public class Introspector {
        this.nodeRoot = nodeRoot;
     }
 
+    /**
+     * Create an instance from class aClass and populate it from nodeRoot structure
+     * @param aClass Class which will be instancied
+     * @param <T> generic type of instance
+     * @return
+     * @throws IntrospectionException
+     */
       public  <T> T toInstance (Class <T> aClass) throws IntrospectionException{
         try {
          final T t =  aClass.getDeclaredConstructor().newInstance();
@@ -44,6 +54,7 @@ public class Introspector {
     private Object invokeGetMethod (String getMethod,String setMethod, Object instance) throws IntrospectionException {
         Object newInstance = null;
         try {
+            //invoke get method
            final Method method = instance.getClass().getMethod(getMethod);
             newInstance = method.invoke(instance);
             if (newInstance == null) {
@@ -62,35 +73,42 @@ public class Introspector {
         return newInstance;
     }
 
+    private void invokeSetMethod (String setMethod,Object currentInstance, Object value) throws IntrospectionException{
+        Optional <Method> optionalMethod = Arrays.stream(currentInstance.getClass().getMethods()).filter(m->m.getName().equals(setMethod)).findFirst();
+        if (optionalMethod.isEmpty()){
+            throw new IntrospectionException("Method " + setMethod + " not found");
+        }
+        try {
+            optionalMethod.get().invoke(currentInstance, value);
+        } catch ( IllegalAccessException | IllegalArgumentException| InvocationTargetException ex) {
+            throw new IntrospectionException(ex.getMessage());
+        }
+    }
+
     private <T> void doIntrospection (Node node, T t) throws IntrospectionException{
-       final List<String> paths = node.getPath();
+       final List<String> properties = node.getPath();
        Object currentInstance = t;
-       for (int i = 0 ; i < paths.size(); i++){
-           String prefix = (i+1 == paths.size()) ? SET_PREFIX:GET_PREFIX;
-           String property = paths.get(i);
-           String methodName = convertPathToMethod(property,prefix);
-           try {
-                if (methodName.startsWith(GET_PREFIX)) {
-                   currentInstance = invokeGetMethod(methodName,convertPathToMethod(property,SET_PREFIX),currentInstance);
-                } else {
-                    //apply set method
-                    Optional <Method> optionalMethod = Arrays.stream(currentInstance.getClass().getMethods()).filter(m->m.getName().equals(methodName)).findFirst();
-                    if (optionalMethod.isEmpty()){
-                        throw new IntrospectionException("Method " + methodName + " not found");
-                    }
-                    optionalMethod.get().invoke(currentInstance,node.getValue());
-                }
-           } catch ( IllegalAccessException | IllegalArgumentException| InvocationTargetException ex) {
-               throw new IntrospectionException(ex.getMessage());
+       for (int i = 0 ; i < properties.size(); i++){
+           String prefix = (i+1 == properties.size()) ? SET_PREFIX:GET_PREFIX;
+           String property = properties.get(i);
+           String methodName = convertPropertyToMethod(property,prefix);
+           if (methodName.startsWith(GET_PREFIX)) {
+               currentInstance = invokeGetMethod(methodName,convertPropertyToMethod(property,SET_PREFIX),currentInstance);
+           } else {
+               //apply set method
+               invokeSetMethod(methodName,currentInstance,node.getValue());
            }
        }
     }
 
 
-    private static String convertPathToMethod (String path,String prefix){
-        String capitalLetter = path.substring(0,1).toUpperCase();
-        String methodName = capitalLetter + path.substring(1);
-        methodName = prefix+methodName;
-        return methodName;
+    private static String convertPropertyToMethod (String property,String prefix){
+        char firstChar = property.charAt(0);
+        String capitalLetter = Character.toString ( firstChar-32);
+        StringBuilder sb = new StringBuilder();
+        sb.append(prefix);
+        sb.append(capitalLetter);
+        sb.append(property.substring(1));
+        return sb.toString();
     }
 }
