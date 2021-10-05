@@ -1,6 +1,7 @@
 package com.david.parser.bean;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Info {
 
@@ -57,5 +58,18 @@ public class Info {
 
     public void setTransformers(List<String> transformers) {
         this.transformers = transformers;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Info info = (Info) o;
+        return name.equals(info.name) && version.equals(info.version) && description.equals(info.description) && dependencies.equals(info.dependencies) && dev_dependencies.equals(info.dev_dependencies) && transformers.equals(info.transformers);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, version, description, dependencies, dev_dependencies, transformers);
     }
 }

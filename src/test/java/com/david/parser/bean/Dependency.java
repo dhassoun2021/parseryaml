@@ -1,5 +1,7 @@
 package com.david.parser.bean;
 
+import java.util.Objects;
+
 public class Dependency {
 
     private String args;
@@ -82,5 +84,18 @@ public class Dependency {
 
     public void setDart_to_js_script_rewriter(String dart_to_js_script_rewriter) {
         this.dart_to_js_script_rewriter = dart_to_js_script_rewriter;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Dependency that = (Dependency) o;
+        return args.equals(that.args) && browser.equals(that.browser) && geo.equals(that.geo) && shelf.equals(that.shelf) && shelf_web_socket.equals(that.shelf_web_socket) && shelf_static.equals(that.shelf_static) && xml_rpc.equals(that.xml_rpc) && google_maps.equals(that.google_maps) && dart_to_js_script_rewriter.equals(that.dart_to_js_script_rewriter);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(args, browser, geo, shelf, shelf_web_socket, shelf_static, xml_rpc, google_maps, dart_to_js_script_rewriter);
     }
 }
