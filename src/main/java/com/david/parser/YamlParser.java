@@ -71,7 +71,7 @@ public class YamlParser extends  AbstractParser {
                 // key/value data
                 if (hasLinePatternKeyValue(line)) {
                     nbLineKeyValue++;
-                    if (nbLineKeyValue == 1 && widthSpaceNodes.get(widthSpace) != null && !(widthSpaceNodes.get(widthSpace) instanceof NodeRoot)) {
+                    if (isFirstLineInKeyValuePattern(nbLineKeyValue) && hasPreviousNodeWithSameWidthSpaceVisited(widthSpace) && !(widthSpaceNodes.get(widthSpace).isRoot())) {
                         widthSpaceNodes.remove(widthSpace);
                     }
                     Node node = getNodeFromLineKeyValuePattern(line);
@@ -111,6 +111,14 @@ public class YamlParser extends  AbstractParser {
         NodeElement parentNode = getParentNode(widthSpace,lastNode);
         parentNode.addNode(node);
         node.setParentNode(parentNode);
+    }
+
+    private boolean hasPreviousNodeWithSameWidthSpaceVisited (int widthSpace) {
+        return widthSpaceNodes.get(widthSpace) != null;
+    }
+
+    private boolean isFirstLineInKeyValuePattern(int nbLineKeyValue) {
+        return nbLineKeyValue == 1;
     }
 
     private boolean isFirstLineRead (int nbLine) {

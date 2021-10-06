@@ -14,4 +14,9 @@ public class NodeRoot implements NodeElement{
     public void addNode (Node node){
         nodes.add(node);
     }
+
+    @Override
+    public boolean isRoot() {
+        return true;
+    }
 }

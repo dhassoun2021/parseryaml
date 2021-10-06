@@ -67,7 +67,9 @@ public class Node implements NodeElement {
         return fields;
     }
 
-
-
+    @Override
+    public boolean isRoot() {
+        return false;
+    }
 }
 
