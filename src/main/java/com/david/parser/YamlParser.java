@@ -21,6 +21,7 @@ public class YamlParser extends  AbstractParser {
     private static final String COLON = ":";
     private static final String DASH = "-";
     private static final String BLANK = " ";
+    private static final char BLANK_CHAR = ' ';
     private static final String KEY_VALUE_PATTERN = "\\w+:\\s\\S.*";
 
 
@@ -32,8 +33,8 @@ public class YamlParser extends  AbstractParser {
      */
     private int computePrefixeWidthSpace (String line){
         int lng = 0;
-        for (int i = 0; i<line.length();i++){
-            if (line.charAt(i) != ' '){
+        for (int i = 0; i < line.length(); i++){
+            if (line.charAt(i) != BLANK_CHAR){
                 return lng;
             } else {
                 lng ++;
@@ -56,7 +57,7 @@ public class YamlParser extends  AbstractParser {
             int widthSpace;
             int nbLineKeyValue = 0;
 
-            NodeElement lastNode = null;
+            NodeElement lastNodeProcessed = null;
             boolean lineWithListPatternProcessed = false;
             List <String> elements = null;
             while ((line = br.readLine()) != null) {
@@ -68,30 +69,34 @@ public class YamlParser extends  AbstractParser {
                     widthSpaceNodes.put(widthSpace,nodeRoot);
                 }
 
-                // key/value data
+                // key/value data ... pattern as "key:value"
                 if (hasLinePatternKeyValue(line)) {
                     nbLineKeyValue++;
                     if (isFirstLineInKeyValuePattern(nbLineKeyValue) && hasPreviousNodeWithSameWidthSpaceVisited(widthSpace) && !(widthSpaceNodes.get(widthSpace).isRoot())) {
                         widthSpaceNodes.remove(widthSpace);
                     }
                     Node node = getNodeFromLineKeyValuePattern(line);
-                    processNode(node,widthSpace,lastNode);
+                    processNode(node,widthSpace,lastNodeProcessed);
 
-                        //Tree structure
+                        //Tree structure ... pattern as ... "tree:"
                     } else if (hasLinePatternNode(line)) {
                         nbLineKeyValue = 0;
                         Node node = getNodeFromLineNodePattern(line);
-                        lastNode = node;
-                        processNode(node,widthSpace,lastNode);
+                        lastNodeProcessed = node;
+                        processNode(node,widthSpace,lastNodeProcessed);
 
-                      //list pattern
+                      //list pattern ... pattern as "- listElement"
                     } else if (hasLinePatternList(line)) {
                         nbLineKeyValue = 0;
                        String elementOfList = getElementList(line);
+
+                       //when first line is processing we create empty list
                        if (!lineWithListPatternProcessed) {
                            elements = new ArrayList<>();
-                           if (lastNode instanceof Node) {
-                               Node nodeList = (Node) lastNode;
+
+                           //add list as value to parent node
+                           if (lastNodeProcessed instanceof Node) {
+                               Node nodeList = (Node) lastNodeProcessed;
                                nodeList.setValue(elements);
                            } else {
                                throw new ParsingException("Error parsing at line " + nbLine);
