@@ -15,7 +15,7 @@ public class TestYamlParser {
     @Test
     public void test() throws Exception {
         YamlParser parser = new YamlParser();
-        NodeRoot nodeRoot = parser.readFile(new File("src/test/resources/file2.yaml"));
+        EntityRoot entityRoot = parser.readFile(new File("src/test/resources/file2.yaml"));
     }
 
     @Test

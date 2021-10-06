@@ -49,8 +49,8 @@ public class YamlParser extends  AbstractParser {
      * @return
      * @throws IOException
      */
-    public NodeRoot readFile (File file) throws IOException,ParsingException {
-        NodeRoot nodeRoot = new NodeRoot();
+    public EntityRoot readFile (File file) throws IOException,ParsingException {
+        EntityRoot entityRoot = new EntityRoot();
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             int nbLine = 1;
@@ -66,7 +66,7 @@ public class YamlParser extends  AbstractParser {
 
                 //store node root at first line read
                 if (isFirstLineRead(nbLine)) {
-                    widthSpaceNodes.put(widthSpace,nodeRoot);
+                    widthSpaceNodes.put(widthSpace, entityRoot);
                 }
 
                 // key/value data ... pattern as "key:value"
@@ -109,7 +109,7 @@ public class YamlParser extends  AbstractParser {
                 nbLine++;
             }
         }
-        return  nodeRoot;
+        return entityRoot;
     }
 
     private void processNode (Node node, int widthSpace, NodeElement lastNode) {

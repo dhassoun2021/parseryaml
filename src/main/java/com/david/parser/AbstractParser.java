@@ -14,8 +14,8 @@ public abstract class AbstractParser implements Parser {
      * Read a  file and store data in the instance corresponding to the class theClass
      */
     public <T> T read(File file, Class<T> theClass) throws IOException, IntrospectionException, ParsingException {
-        final NodeRoot nodeRoot = readFile(file);
-        final Introspector introspector = new Introspector(nodeRoot);
+        final EntityRoot entityRoot = readFile(file);
+        final Introspector introspector = new Introspector(entityRoot);
         return introspector.toInstance(theClass);
     }
 
@@ -25,5 +25,5 @@ public abstract class AbstractParser implements Parser {
      * @return
      * @throws IOException
      */
-    public abstract NodeRoot readFile (File file) throws IOException, ParsingException;
+    public abstract EntityRoot readFile (File file) throws IOException, ParsingException;
 }

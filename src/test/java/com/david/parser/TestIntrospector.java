@@ -9,20 +9,20 @@ public class TestIntrospector {
 
     @Test
     public void applyIntrospection()  throws Exception{
-        NodeRoot nodeRoot = new NodeRoot();
+        EntityRoot entityRoot = new EntityRoot();
         Node nodeName = new Node("name");
         nodeName.setValue("value");
-        nodeRoot.addNode(nodeName);
+        entityRoot.addNode(nodeName);
         Node nodeDependency = new Node("dependencies");
         Node nodeGeo = new Node("geo");
         nodeDependency.addNode(nodeGeo);
-        nodeRoot.addNode(nodeDependency);
-        nodeName.setParentNode(nodeRoot);
-        nodeDependency.setParentNode(nodeRoot);
+        entityRoot.addNode(nodeDependency);
+        nodeName.setParentNode(entityRoot);
+        nodeDependency.setParentNode(entityRoot);
         nodeDependency.setParentNode(nodeDependency);
         nodeGeo.setParentNode(nodeDependency);
         nodeGeo.setValue("any");
-        Introspector introspector = new Introspector(nodeRoot);
+        Introspector introspector = new Introspector(entityRoot);
         Info info = introspector.toInstance(Info.class);
         Assert.assertNotNull(info);
         Assert.assertEquals("value",info.getName());

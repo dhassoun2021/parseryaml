@@ -9,9 +9,24 @@ import java.util.List;
  */
 public class Node implements NodeElement {
 
+    /**
+     * Name of property
+     */
     private final String name;
+
+    /**
+     * Value of property
+     */
     private Object value;
+
+    /**
+     * Childre node
+     */
     private final List<Node> children = new ArrayList<>();
+
+    /**
+     * Parent node
+     */
     private NodeElement parentNode;
 
     public Node(String name) {
@@ -48,10 +63,6 @@ public class Node implements NodeElement {
 
     public boolean hasChildren() {
         return !children.isEmpty();
-    }
-
-    public boolean hasParent() {
-        return parentNode != null;
     }
 
     public List<String> getPath() {

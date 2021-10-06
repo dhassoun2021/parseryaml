@@ -3,7 +3,7 @@ package com.david.introspector;
 import com.david.exceptions.IntrospectionException;
 import com.david.introspector.util.InstrospectorUtil;
 import com.david.parser.Node;
-import com.david.parser.NodeRoot;
+import com.david.parser.EntityRoot;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -19,10 +19,10 @@ public class Introspector {
     private final static String GET_PREFIX = "get";
     private final static String SET_PREFIX = "set";
 
-    private final NodeRoot nodeRoot;
+    private final EntityRoot entityRoot;
 
-    public Introspector(NodeRoot nodeRoot) {
-        this.nodeRoot = nodeRoot;
+    public Introspector(EntityRoot entityRoot) {
+        this.entityRoot = entityRoot;
     }
 
     /**
@@ -36,7 +36,7 @@ public class Introspector {
     public <T> T toInstance(Class<T> aClass) throws IntrospectionException {
         try {
             final T t = aClass.getDeclaredConstructor().newInstance();
-            for (Node node : nodeRoot.getNodes()) {
+            for (Node node : entityRoot.getNodes()) {
                 applyIntrospection(node, t);
             }
             return t;

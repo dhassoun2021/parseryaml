@@ -3,7 +3,10 @@ package com.david.parser;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NodeRoot implements NodeElement{
+/**
+ * Root element of structure tree
+ */
+public class EntityRoot implements NodeElement{
 
     private final List<Node> nodes = new ArrayList<>();
 
