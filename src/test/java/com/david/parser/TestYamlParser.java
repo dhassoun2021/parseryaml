@@ -12,16 +12,11 @@ import static org.junit.Assert.assertEquals;
 
 public class TestYamlParser {
 
-    @Test
-    public void test() throws Exception {
-        YamlParser parser = new YamlParser();
-        EntityRoot entityRoot = parser.readFile(new File("src/test/resources/file2.yaml"));
-    }
 
     @Test
     public void parseYamlFileShouldSuccess() throws Exception {
         Parser parser = new YamlParser();
-        Info info = parser.read(new File("src/test/resources/file2.yaml"), Info.class);
+        Info info = parser.read(new File("src/test/resources/file_nominal.yaml"), Info.class);
         Info infoExpected = buildInfo();
         assertEquals(infoExpected,info);
     }
