@@ -14,15 +14,18 @@ import java.util.Optional;
 /**
  * This class has responsability to create an instance dynamically and populate it from data store in EntityRoot structure.
  */
-public class Introspector {
+public class IntrospectorEngine {
 
     private final static String GET_PREFIX = "get";
     private final static String SET_PREFIX = "set";
 
-    private final EntityRoot entityRoot;
+    private static IntrospectorEngine _instance = new IntrospectorEngine();
+    private IntrospectorEngine() {
 
-    public Introspector(EntityRoot entityRoot) {
-        this.entityRoot = entityRoot;
+    }
+
+    public static IntrospectorEngine getInstance() {
+        return _instance;
     }
 
     /**
@@ -33,7 +36,7 @@ public class Introspector {
      * @return
      * @throws ParsingException
      */
-    public <T> T toInstance(Class<T> aClass)  {
+    public <T> T toInstance(Class<T> aClass, EntityRoot entityRoot)  {
         try {
             final T t = aClass.getDeclaredConstructor().newInstance();
             for (Node node : entityRoot.getNodes()) {
