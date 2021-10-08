@@ -1,9 +1,9 @@
-package com.david.introspector;
+package com.david.yamlparser.introspector;
 
-import com.david.exceptions.ParsingException;
-import com.david.introspector.util.InstrospectorUtil;
-import com.david.parser.Node;
-import com.david.parser.EntityRoot;
+import com.david.yamlparser.exceptions.ParsingException;
+import com.david.yamlparser.introspector.util.InstrospectorUtil;
+import com.david.yamlparser.Node;
+import com.david.yamlparser.EntityRoot;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -20,6 +20,7 @@ public class IntrospectorEngine {
     private final static String SET_PREFIX = "set";
 
     private static IntrospectorEngine _instance = new IntrospectorEngine();
+
     private IntrospectorEngine() {
 
     }

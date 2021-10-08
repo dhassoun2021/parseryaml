@@ -1,4 +1,4 @@
-package com.david.exceptions;
+package com.david.yamlparser.exceptions;
 
 public class ParsingException extends RuntimeException{
 

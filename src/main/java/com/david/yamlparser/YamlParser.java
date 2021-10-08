@@ -1,6 +1,6 @@
-package com.david.parser;
+package com.david.yamlparser;
 
-import com.david.exceptions.ParsingException;
+import com.david.yamlparser.exceptions.ParsingException;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -9,11 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This class has responsability to parse YAML file and store data in instance
+ * This class has responsability to parse YAML file and store data in recursive structure
  */
-public class YamlParser extends  AbstractParser {
-
-    private Map <Integer,NodeElement> widthSpaceNodes = new HashMap<>();
+ public class YamlParser extends  AbstractParser {
 
     private static final String COLON = ":";
     private static final String DASH = "-";
@@ -21,24 +19,11 @@ public class YamlParser extends  AbstractParser {
     private static final char BLANK_CHAR = ' ';
     private static final String KEY_VALUE_PATTERN = "\\w+:\\s\\S.*";
 
-
-
     /**
-     * Compute length of white space begining a line
-     * @param line
-     * @return
+     * Store deep level of data parsed and associate it to parent NodeElement structure.
      */
-    private int computePrefixeWidthSpace (String line){
-        int lng = 0;
-        for (int i = 0; i < line.length(); i++){
-            if (line.charAt(i) != BLANK_CHAR){
-                return lng;
-            } else {
-                lng ++;
-            }
-        }
-        return lng;
-    }
+    private Map <Integer,NodeElement> widthSpaceNodes = new HashMap<>();
+
 
     /**
      * Read a yaml file and store data in recursive structure
@@ -109,6 +94,23 @@ public class YamlParser extends  AbstractParser {
             throw new ParsingException(ex.getMessage());
         }
         return entityRoot;
+    }
+
+    /**
+     * Compute length of white space begining a line
+     * @param line
+     * @return
+     */
+    private int computePrefixeWidthSpace (String line){
+        int lng = 0;
+        for (int i = 0; i < line.length(); i++){
+            if (line.charAt(i) != BLANK_CHAR){
+                return lng;
+            } else {
+                lng ++;
+            }
+        }
+        return lng;
     }
 
     private void processNode (Node node, int widthSpace, NodeElement lastNode) {

@@ -1,4 +1,4 @@
-package com.david.parser.bean;
+package com.david.yamlparser.bean;
 
 import java.util.Objects;
 

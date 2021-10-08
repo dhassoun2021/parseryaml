@@ -1,8 +1,8 @@
-package com.david.parser;
+package com.david.yamlparser;
 
-import com.david.parser.bean.Dependency;
-import com.david.parser.bean.DevDependency;
-import com.david.parser.bean.Info;
+import com.david.yamlparser.bean.Dependency;
+import com.david.yamlparser.bean.DevDependency;
+import com.david.yamlparser.bean.Info;
 import org.junit.Test;
 
 import java.io.File;
@@ -15,7 +15,7 @@ public class TestYamlParser {
 
     @Test
     public void parseYamlFileShouldSuccess() throws Exception {
-        Parser parser = new YamlParser();
+        Parser parser = YamlFactory.getParser();
         Info info = parser.read(new File("src/test/resources/file_nominal.yaml"), Info.class);
         Info infoExpected = buildInfo();
         assertEquals(infoExpected,info);

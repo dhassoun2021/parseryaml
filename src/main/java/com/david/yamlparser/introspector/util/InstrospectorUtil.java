@@ -1,4 +1,4 @@
-package com.david.introspector.util;
+package com.david.yamlparser.introspector.util;
 
 /**
  * This class contains utility method for introspection

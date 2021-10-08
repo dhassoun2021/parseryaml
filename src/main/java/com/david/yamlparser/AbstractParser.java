@@ -1,10 +1,12 @@
-package com.david.parser;
+package com.david.yamlparser;
 
-import com.david.introspector.IntrospectorEngine;
+import com.david.yamlparser.introspector.IntrospectorEngine;
 
 import java.io.File;
 
-
+/**
+ * This class has responsability to parse YAML file and store data in instance
+ */
 public abstract class AbstractParser implements Parser {
 
 
