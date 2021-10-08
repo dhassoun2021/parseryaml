@@ -1,4 +1,4 @@
-package com.david.yamlparser;
+package com.david.yamlparser.structure;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Root element of structure tree
  */
-public class EntityRoot implements NodeElement{
+public class EntityRoot implements NodeElement {
 
     private final List<Node> nodes = new ArrayList<>();
 

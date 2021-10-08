@@ -3,6 +3,7 @@ package com.david.yamlparser;
 import com.david.yamlparser.bean.Dependency;
 import com.david.yamlparser.bean.DevDependency;
 import com.david.yamlparser.bean.Info;
+import com.david.yamlparser.parser.Parser;
 import org.junit.Test;
 
 import java.io.File;

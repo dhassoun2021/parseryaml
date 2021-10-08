@@ -1,8 +1,14 @@
-package com.david.yamlparser;
+package com.david.yamlparser.parser;
 
 import com.david.yamlparser.exceptions.ParsingException;
+import com.david.yamlparser.structure.EntityRoot;
+import com.david.yamlparser.structure.Node;
+import com.david.yamlparser.structure.NodeElement;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +17,7 @@ import java.util.Map;
 /**
  * This class has responsability to parse YAML file and store data in recursive structure
  */
- public class YamlParser extends  AbstractParser {
+ public class YamlParser extends AbstractParser {
 
     private static final String COLON = ":";
     private static final String DASH = "-";
@@ -22,7 +28,7 @@ import java.util.Map;
     /**
      * Store deep level of data parsed and associate it to parent NodeElement structure.
      */
-    private Map <Integer,NodeElement> widthSpaceNodes = new HashMap<>();
+    private Map <Integer, NodeElement> widthSpaceNodes = new HashMap<>();
 
 
     /**

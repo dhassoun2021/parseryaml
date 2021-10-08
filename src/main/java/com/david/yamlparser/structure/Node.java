@@ -1,4 +1,4 @@
-package com.david.yamlparser;
+package com.david.yamlparser.structure;
 
 import java.util.ArrayList;
 import java.util.Collections;

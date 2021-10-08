@@ -1,4 +1,4 @@
-package com.david.yamlparser;
+package com.david.yamlparser.structure;
 
 public interface NodeElement {
 

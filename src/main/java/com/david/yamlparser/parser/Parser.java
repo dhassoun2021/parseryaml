@@ -1,4 +1,4 @@
-package com.david.yamlparser;
+package com.david.yamlparser.parser;
 
 
 import java.io.File;

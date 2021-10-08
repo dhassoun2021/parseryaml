@@ -1,6 +1,7 @@
-package com.david.yamlparser;
+package com.david.yamlparser.parser;
 
 import com.david.yamlparser.introspector.IntrospectorEngine;
+import com.david.yamlparser.structure.EntityRoot;
 
 import java.io.File;
 

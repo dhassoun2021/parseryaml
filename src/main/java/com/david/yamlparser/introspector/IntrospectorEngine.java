@@ -2,8 +2,8 @@ package com.david.yamlparser.introspector;
 
 import com.david.yamlparser.exceptions.ParsingException;
 import com.david.yamlparser.introspector.util.InstrospectorUtil;
-import com.david.yamlparser.Node;
-import com.david.yamlparser.EntityRoot;
+import com.david.yamlparser.structure.EntityRoot;
+import com.david.yamlparser.structure.Node;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
