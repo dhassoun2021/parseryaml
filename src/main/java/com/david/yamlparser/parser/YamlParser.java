@@ -92,7 +92,10 @@ import java.util.Map;
                        }
                        elements.add(elementOfList);
                        lineWithListPatternProcessed = true;
-                    }
+                    }else {
+                    //pattern is unkown ... parsing error
+                    throw new ParsingException("Error parsing at line " + nbLine);
+                }
 
                 nbLine++;
             }

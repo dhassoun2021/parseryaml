@@ -3,6 +3,7 @@ package com.david.yamlparser;
 import com.david.yamlparser.bean.Dependency;
 import com.david.yamlparser.bean.DevDependency;
 import com.david.yamlparser.bean.Info;
+import com.david.yamlparser.exceptions.ParsingException;
 import com.david.yamlparser.parser.Parser;
 import org.junit.Test;
 
@@ -15,11 +16,17 @@ public class TestYamlParser {
 
 
     @Test
-    public void parseYamlFileShouldSuccess() throws Exception {
+    public void parseYamlFileShouldSuccess(){
         Parser parser = YamlFactory.getParser();
         Info info = parser.read(new File("src/test/resources/file_nominal.yaml"), Info.class);
         Info infoExpected = buildInfo();
         assertEquals(infoExpected,info);
+    }
+
+    @Test(expected = ParsingException.class)
+    public void parseYamlFileShouldFailedWhenErrorFormat(){
+        Parser parser = YamlFactory.getParser();
+        parser.read(new File("src/test/resources/file_withError.yaml"), Info.class);
     }
 
     private Info buildInfo() {
