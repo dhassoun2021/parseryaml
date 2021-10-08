@@ -1,6 +1,5 @@
 package com.david.parser;
 
-import com.david.exceptions.IntrospectionException;
 import com.david.exceptions.ParsingException;
 import com.david.introspector.Introspector;
 
@@ -13,7 +12,7 @@ public abstract class AbstractParser implements Parser {
     /**
      * Read a  file and store data in the instance corresponding to the class theClass
      */
-    public <T> T read(File file, Class<T> theClass) throws IOException, IntrospectionException, ParsingException {
+    public <T> T read(File file, Class<T> theClass)  {
         final EntityRoot entityRoot = readFile(file);
         final Introspector introspector = new Introspector(entityRoot);
         return introspector.toInstance(theClass);
@@ -25,5 +24,5 @@ public abstract class AbstractParser implements Parser {
      * @return
      * @throws IOException
      */
-    public abstract EntityRoot readFile (File file) throws IOException, ParsingException;
+    public abstract EntityRoot readFile (File file) ;
 }

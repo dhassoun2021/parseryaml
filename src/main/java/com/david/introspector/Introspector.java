@@ -1,6 +1,6 @@
 package com.david.introspector;
 
-import com.david.exceptions.IntrospectionException;
+import com.david.exceptions.ParsingException;
 import com.david.introspector.util.InstrospectorUtil;
 import com.david.parser.Node;
 import com.david.parser.EntityRoot;
@@ -31,9 +31,9 @@ public class Introspector {
      * @param aClass Class which will be instancied
      * @param <T>    generic type of instance
      * @return
-     * @throws IntrospectionException
+     * @throws ParsingException
      */
-    public <T> T toInstance(Class<T> aClass) throws IntrospectionException {
+    public <T> T toInstance(Class<T> aClass)  {
         try {
             final T t = aClass.getDeclaredConstructor().newInstance();
             for (Node node : entityRoot.getNodes()) {
@@ -41,11 +41,11 @@ public class Introspector {
             }
             return t;
         } catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException ex) {
-            throw new IntrospectionException((ex.getMessage()));
+            throw new ParsingException((ex.getMessage()));
         }
     }
 
-    private <T> void applyIntrospection(Node node, T t) throws IntrospectionException {
+    private <T> void applyIntrospection(Node node, T t) {
         if (!node.hasChildren()) {
             doIntrospection(node, t);
             return;
@@ -55,7 +55,7 @@ public class Introspector {
         }
     }
 
-    private Object invokeGetMethod(String getMethod, String setMethod, Object instance) throws IntrospectionException {
+    private Object invokeGetMethod(String getMethod, String setMethod, Object instance)  {
         Object newInstance = null;
         try {
             //invoke get method
@@ -69,32 +69,32 @@ public class Introspector {
                 final Optional<Method> optionalSetMethod = Arrays.stream(instance.getClass().getMethods()).filter(m -> m.getName().equals(setMethod)).findFirst();
                 optionalSetMethod.get().invoke(instance, newInstance);
                 if (optionalSetMethod.isEmpty()) {
-                    throw new IntrospectionException("Method " + setMethod + " not found");
+                    throw new ParsingException("Method " + setMethod + " not found");
                 }
             }
         } catch
         (NoSuchMethodException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
                         ex) {
-            throw new IntrospectionException(ex.getMessage());
+            throw new ParsingException(ex.getMessage());
 
         }
 
         return newInstance;
     }
 
-    private void invokeSetMethod(String setMethod, Object currentInstance, Object value) throws IntrospectionException {
+    private void invokeSetMethod(String setMethod, Object currentInstance, Object value)  {
         Optional<Method> optionalMethod = Arrays.stream(currentInstance.getClass().getMethods()).filter(m -> m.getName().equals(setMethod)).findFirst();
         if (optionalMethod.isEmpty()) {
-            throw new IntrospectionException("Method " + setMethod + " not found");
+            throw new ParsingException ("Method " + setMethod + " not found");
         }
         try {
             optionalMethod.get().invoke(currentInstance, value);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            throw new IntrospectionException(ex.getMessage());
+            throw new ParsingException(ex.getMessage());
         }
     }
 
-    private <T> void doIntrospection(Node node, T t) throws IntrospectionException {
+    private <T> void doIntrospection(Node node, T t){
         //properties corresponding to methods to invoke
         //for exemple if properties are : x,y,z, methods to invoke will be getX().getY().setZ(...)
         final List<String> properties = node.getPath();

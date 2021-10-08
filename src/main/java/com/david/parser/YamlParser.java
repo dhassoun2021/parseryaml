@@ -2,10 +2,7 @@ package com.david.parser;
 
 import com.david.exceptions.ParsingException;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,7 +46,7 @@ public class YamlParser extends  AbstractParser {
      * @return
      * @throws IOException
      */
-    public EntityRoot readFile (File file) throws IOException,ParsingException {
+    public EntityRoot readFile (File file)  {
         EntityRoot entityRoot = new EntityRoot();
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
@@ -108,6 +105,8 @@ public class YamlParser extends  AbstractParser {
 
                 nbLine++;
             }
+        } catch (IOException ex) {
+            throw new ParsingException(ex.getMessage());
         }
         return entityRoot;
     }

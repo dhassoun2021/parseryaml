@@ -1,10 +1,8 @@
 package com.david.exceptions;
 
-public class ParsingException extends Exception{
+public class ParsingException extends RuntimeException{
 
-    private String message;
-
-    public ParsingException(String message){
+    public ParsingException (String message){
         super(message);
     }
 }
